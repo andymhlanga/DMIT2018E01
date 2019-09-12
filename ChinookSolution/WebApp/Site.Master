@@ -72,7 +72,7 @@
                     <asp:Menu ID="navMenu" runat="server"
                         BackColor="#222222" BorderColor="Red" 
                         StaticMenuItemStyle-ForeColor="#999999"
-                        StaticMenuItemStyle-VericalPadding =" 10px"
+                        StaticMenuItemStyle-VericalPadding ="20px"
                         StaticMenuItemStyle-HorizontalPadding ="10px"
                         RenderingMode ="List" Orientation="Horizontal"
                         DynamicMenuStyle-ForeColor="#99999"
