@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 
 using ChinookSystem.DAL;
 using ChinookSystem.Data.Entities;
+using System.ComponentModel; //to make it discoverable
 #endregion
 
 namespace ChinookSystem.BLL
 {
-    class AlbumController
+    [DataObject]
+   public class AlbumController
     {
 
         public List<Album> Album_List()
@@ -33,7 +35,21 @@ namespace ChinookSystem.BLL
             }
         }
 
+        [DataObjectMethod(DataObjectMethodType.Select,false)] //false dont set default selection
+        public List<Album> Album_FindByArtist(int artistid)
+        {
+            using (var context = new ChinookContext())
+            {  //built in data set ienumerable
 
+               var results = from x in context.Albums
+                             where x.ArtistId == artistid
+                             select x;
+                return results.ToList(); //linq will execute when the result hits the list
+                
+            }
+
+
+        }
 
 
     }

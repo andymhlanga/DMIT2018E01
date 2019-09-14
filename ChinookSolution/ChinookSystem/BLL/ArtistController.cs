@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 using ChinookSystem.DAL;
 using ChinookSystem.Data.Entities;
+using System.ComponentModel;
 #endregion
 
 namespace ChinookSystem.BLL
-{
+{ [DataObject]
    public class ArtistController
     {
       
@@ -23,7 +24,7 @@ namespace ChinookSystem.BLL
             }
         }
 
-
+        [DataObjectMethod(DataObjectMethodType.Select,false)]
         public Artist Artist_Get(int artistid)
         {
             // using clause starts a transaction Context is the current instance of chinook
