@@ -94,7 +94,8 @@
         SelectMethod="Artist_Get" 
         TypeName="ChinookSystem.BLL.ArtistController">
         <SelectParameters>
-            <asp:Parameter Name="artistid" Type="Int32"></asp:Parameter>
+            <asp:ControlParameter ControlID="ArtistList" PropertyName="SelectedValue" DefaultValue="0" Name="artistid" Type="Int32"></asp:ControlParameter>
+
         </SelectParameters>
     </asp:ObjectDataSource>
 </asp:Content>
