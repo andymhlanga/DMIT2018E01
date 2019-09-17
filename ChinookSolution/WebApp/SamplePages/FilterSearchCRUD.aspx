@@ -7,7 +7,7 @@
     <h1>Filter Search</h1>
     <blockquote class="alert alert-info">
         This page will review filter search techniques. This page will using
-        code-behind and ObjectDataSource on multi-record controls. This page will
+        code-behind and ObjectDataSource on multi-record controls. This page will.
         use various form controls. This will review event driven logic required for a CRUD process.
     </blockquote>
     <div class="col-md-offset-1">
