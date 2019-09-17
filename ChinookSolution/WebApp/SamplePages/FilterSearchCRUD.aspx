@@ -23,7 +23,8 @@
           <asp:RangeValidator ID="RangeEditReleaseYear" runat="server" ErrorMessage="Year needs to be betweeen 1950 and today" Display="None" ForeColor ="Firebrick" 
             SetFocusOnError="true" ControlToValidate="EditReleaseYear" Type ="Integer" MinimumValue="1950"></asp:RangeValidator>
 
-
+        <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
+        <br />
         <asp:Label ID="label1" runat="server" Text="Select an artist:"></asp:Label>
         &nbsp;&nbsp;
         <asp:DropDownList ID="ArtistList" runat="server"></asp:DropDownList>
