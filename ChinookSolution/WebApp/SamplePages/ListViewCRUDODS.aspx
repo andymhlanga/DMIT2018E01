@@ -13,7 +13,7 @@
     <br />
 
     <asp:ListView ID="AlbumList" runat="server" 
-        DataSourceID="AlbumListODS" 
+        DataSourceID="AlbumListODS" DataKeyNames ="AlbumId"
         InsertItemPosition="LastItem">
         <AlternatingItemTemplate>
             <tr style="background-color: #FFFFFF; color: #284775;">
