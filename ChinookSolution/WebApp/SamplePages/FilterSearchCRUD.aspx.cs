@@ -181,7 +181,7 @@ namespace WebApp.SamplePages
             }
             else if (int.TryParse(albumid, out editalbumid))
             {
-                MessageUserControl.ShowInfo("Attention!", "Curerent album ID is invalid");
+                MessageUserControl.ShowInfo("Attention!", "Current album ID is invalid");
             }
             else
             {
