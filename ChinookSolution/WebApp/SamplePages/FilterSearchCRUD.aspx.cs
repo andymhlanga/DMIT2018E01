@@ -128,12 +128,80 @@ namespace WebApp.SamplePages
 
         protected void Update_Click(object sender, EventArgs e)
         {
+            if (Page.IsValid)
+            {
+                int  editalbumid = 0;
+                string albumid = EditAlbumID.Text;
+                if (string.IsNullOrEmpty(albumid))
+                {
+                    MessageUserControl.ShowInfo("Attention!","lookup albulm id before editing"); // show info takes a message and displays it there is a title and message.
+                }
+                else if (int.TryParse(albumid, out editalbumid))
+                {
+                    MessageUserControl.ShowInfo("Attention!", "Curerent album ID is invalid");
+                }
+                
+                string albumtitle = EditTitle.Text;
+                int albumyear = int.Parse(EditReleaseYear.Text);
+                string albumlabel = EditReleaseLabel.Text == "" ? null : EditReleaseLabel.Text;
+                int albumartist = int.Parse(EditAlbumArtistList.SelectedValue);
 
+                Album theAlbum = new Album();
+                theAlbum.AlbumId = editalbumid;
+                theAlbum.Title = albumtitle;
+                theAlbum.ArtistId = albumartist;
+                theAlbum.ReleaseYear = albumyear;
+                theAlbum.ReleaseLabel = albumlabel;
+
+                MessageUserControl.TryRun(() =>
+                {
+                    AlbumController sysmgr = new AlbumController();
+                    int rowsaffected = sysmgr.Album_Update(theAlbum);
+                    if (rowsaffected > 0)
+                    {
+                        AlbumList.DataBind(); //Repopulate the ODS album list 
+                    }
+                    else
+                    {
+                        throw new Exception("Album was not found. Repeat lookup and update again"); //this will be caught by the message user control exceptions you have to use them yourself.
+                    }
+
+                }, "Successful", "Album Updated");
+
+            }
         }
 
         protected void Remove_Click(object sender, EventArgs e)
         {
+            int editalbumid = 0;
+            string albumid = EditAlbumID.Text;
+            if (string.IsNullOrEmpty(albumid))
+            {
+                MessageUserControl.ShowInfo("Attention!", "lookup albulm id before editing"); // show info takes a message and displays it there is a title and message.
+            }
+            else if (int.TryParse(albumid, out editalbumid))
+            {
+                MessageUserControl.ShowInfo("Attention!", "Curerent album ID is invalid");
+            }
+            else
+            {
+                MessageUserControl.TryRun(() =>
+                {
+                    AlbumController sysmgr = new AlbumController();
+                    int rowsaffected = sysmgr.Album_Delete(editalbumid);
+                    if (rowsaffected > 0)
+                    {
+                        AlbumList.DataBind(); //Repopulate the ODS album list 
+                        EditAlbumID.Text = "";
+                }
+                    else
+                    {
+                        throw new Exception("Album was not found. Repeat lookup and remove again"); //this will be caught by the message user control exceptions you have to use them yourself.
+                }
+
+                }, "Successful", "Album Removed");
+            }
 
         }
     }
-}
+ }
