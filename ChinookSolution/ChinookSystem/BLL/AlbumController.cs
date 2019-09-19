@@ -16,7 +16,7 @@ namespace ChinookSystem.BLL
     [DataObject]
    public class AlbumController
     {
-
+        #region Queries
         public List<Album> Album_List()
         {    // using clause starts a transaction Context is the current instance of chinook
             using (var context = new ChinookContext())
@@ -51,6 +51,59 @@ namespace ChinookSystem.BLL
 
         }
 
+        #endregion
+
+
+
+        #region Add,Update,Delete
+
+
+        public int Album_Add(Album item)
+        {
+            using (var context = new ChinookContext())
+            {
+
+                context.Albums.Add(item); //staging step no on db yet
+                context.SaveChanges(); //This is what commits the items
+                return item.AlbumId;    //Returns new ID value
+
+            }
+        }
+
+        public int Album_Update(Album item)
+        {
+            using (var context = new ChinookContext())
+            {
+
+                context.Entry(item).State = System.Data.Entity.EntityState.Modified; //staging step no on db yet
+                 return  context.SaveChanges(); //This is what commits the items and 
+                
+
+            }
+        }
+
+        public int Album_Delete(int albumid)
+        {
+            using (var context = new ChinookContext())
+            {
+
+                var existing = context.Albums.Find(albumid);
+                if (existing == null)
+                {
+                    throw new Exception("Album not on file. Delete unnecessary");
+                }
+                else
+                {
+                    context.Albums.Remove(existing);
+                    return context.SaveChanges();
+
+                }
+            }
+        }
+
+
+
+        #endregion
 
     }
 }
