@@ -22,6 +22,9 @@ namespace ChinookSystem.Data.Entities
 
         public int ArtistId { get; set; }
 
+
+        //the range validation and annotation can check a field for a range of values.
+        //the minimum and maximum values must be constants 
         public int ReleaseYear { get; set; }
 
         [StringLength(50, ErrorMessage = "Album label is limited to 50 characters")]

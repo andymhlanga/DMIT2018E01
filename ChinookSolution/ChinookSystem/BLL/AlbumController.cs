@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ChinookSystem.DAL;
 using ChinookSystem.Data.Entities;
 using System.ComponentModel;
+using DMIT2018Common.UserControls;
 #endregion
 
 namespace ChinookSystem.BLL
@@ -15,6 +16,11 @@ namespace ChinookSystem.BLL
     [DataObject]
     public class AlbumController
     {
+
+        #region Class Variables
+
+        private List<string> reasons = new List<string>();
+        #endregion
         #region Queries
         [DataObjectMethod(DataObjectMethodType.Select,false)]
         public List<Album> Album_List()
@@ -53,21 +59,39 @@ namespace ChinookSystem.BLL
         {
             using (var context = new ChinookContext())
             {
-                context.Albums.Add(item);   //staging
-                context.SaveChanges();      //committed
-                return item.AlbumId;        //return new id value
+                if (CheckReleaseYear(item))
+                {
+                    context.Albums.Add(item);   //staging
+                    context.SaveChanges();      //committed
+                    return item.AlbumId;        //return new id value
+                }
+                else
+                {
+                    throw new BusinessRuleException("Validation Error", reasons);
+                }
             }
         }
 
         [DataObjectMethod(DataObjectMethodType.Update,false)]
         public int Album_Update(Album item)
         {
-            using (var context = new ChinookContext())
-            {
+          
+                using (var context = new ChinookContext())
+
+                if (CheckReleaseYear(item))
+                {
+                 
                 context.Entry(item).State =
                     System.Data.Entity.EntityState.Modified;
                 return context.SaveChanges();
-            }
+
+                }
+                else
+                {
+                    throw new BusinessRuleException("Validation Error", reasons);
+                }
+
+        
         }
 
         [DataObjectMethod(DataObjectMethodType.Delete,false)]
@@ -90,7 +114,37 @@ namespace ChinookSystem.BLL
                     return context.SaveChanges();
                 }
             }
-            #endregion
+       
         }
+
+        #endregion
+
+        #region Support Methods
+        private bool CheckReleaseYear(Album item)
+        {
+            bool isValid = true;
+            int releaseyear;
+            if (string.IsNullOrEmpty(item.ReleaseYear.ToString()))
+            {
+                isValid = false;
+                reasons.Add("Release year is required");
+            }
+            else if(!int.TryParse(item.ReleaseYear.ToString(), out releaseyear))
+            {
+                isValid = false;
+                reasons.Add("Release year is not a number");
+            }
+            else if (releaseyear < 1950 || releaseyear > DateTime.Today.Year)
+            {
+                isValid = false;
+                reasons.Add(string.Format("Album release yearof {0} invalid . Year must be between 1920 and Today", releaseyear));
+            }
+
+            return isValid;
+
+        }
+
+
+        #endregion
     }
 }
