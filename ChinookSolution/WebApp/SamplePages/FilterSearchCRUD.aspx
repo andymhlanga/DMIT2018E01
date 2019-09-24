@@ -3,38 +3,46 @@
 <%@ Register Src="~/UserControls/MessageUserControl.ascx" TagPrefix="uc1" TagName="MessageUserControl" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
-    <h1>Filter Search</h1>
+ <h1>Filter Search</h1>
     <blockquote class="alert alert-info">
         This page will review filter search techniques. This page will using
-        code-behind and ObjectDataSource on multi-record controls. This page will.
-        use various form controls. This will review event driven logic required for a CRUD process.
+        code-behind and ObjectDataSource on multi-record controls. This page will
+        use various form controls. This will review event driven logic reuired for a CRUD process.
     </blockquote>
+
     <div class="col-md-offset-1">
         <uc1:MessageUserControl runat="server" ID="MessageUserControl" />
-        <br /> <br />
-        <!-- Validation Controls -->
-        <asp:RequiredFieldValidator ID="RequiredFieldEditTitle" runat="server" ErrorMessage="Title field is required" Display="None"
-            ForeColor ="Firebrick" SetFocusOnError="true" ControlToValidate="EditTitle"></asp:RequiredFieldValidator>
-
-          <asp:RequiredFieldValidator ID="RequiredFieldEditReleaseYear" runat="server" ErrorMessage="Year field is required" Display="None"
-            ForeColor ="Firebrick" SetFocusOnError="true" ControlToValidate="EditReleaseYear"></asp:RequiredFieldValidator>
-
-          <asp:RangeValidator ID="RangeEditReleaseYear" runat="server" ErrorMessage="Year needs to be betweeen 1950 and today" Display="None" ForeColor ="Firebrick" 
-            SetFocusOnError="true" ControlToValidate="EditReleaseYear" Type ="Integer" MinimumValue="1950"></asp:RangeValidator>
-
+        <br /><br />
+        <!-- Validation controls-->
+        <asp:RequiredFieldValidator ID="RequiredFieldEditTitle" runat="server" 
+            ErrorMessage="Title field is required" Display="None"
+             ForeColor="Firebrick" SetFocusOnError="true"
+             ControlToValidate="EditTitle">
+        </asp:RequiredFieldValidator>
+        <asp:RequiredFieldValidator ID="RequiredFieldEditReleaseYear" runat="server" 
+            ErrorMessage="Year field is required" Display="None"
+             ForeColor="Firebrick" SetFocusOnError="true"
+             ControlToValidate="EditReleaseYear">
+        </asp:RequiredFieldValidator>
+        <asp:RangeValidator ID="RangeEditReleaseYear" runat="server" 
+            ErrorMessage="Year needs to be between 1950 and today"
+             Display="None" ForeColor="Firebrick" SetFocusOnError="true"
+             ControlToValidate="EditReleaseYear"
+             Type="Integer" MinimumValue="1950"></asp:RangeValidator>
         <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
         <br />
         <asp:Label ID="label1" runat="server" Text="Select an artist:"></asp:Label>
         &nbsp;&nbsp;
         <asp:DropDownList ID="ArtistList" runat="server"></asp:DropDownList>
         &nbsp;&nbsp;
-        <asp:LinkButton ID="FetchAlbums" runat="server" CausesValidation="false">Fetch Albums</asp:LinkButton>
+        <asp:LinkButton ID="FetchAlbums" runat="server" CausesValidation="false" >Fetch Albums</asp:LinkButton>
         <br />
-        <asp:GridView ID="AlbumList" runat="server" AutoGenerateColumns="false"
-            AllowPaging="True" PageSize="5" CssClass="table table-striped"
+        <asp:GridView ID="AlbumList" runat="server"
+            AutoGenerateColumns="false" AllowPaging="True"
+            PageSize="5" CssClass="table table-striped"
             GridLines="Horizontal" BorderStyle="None" 
-            DataSourceID="AlbumListODS" OnSelectedIndexChanged="AlbumList_SelectedIndexChanged">
+            DataSourceID="AlbumListODS" 
+            OnSelectedIndexChanged="AlbumList_SelectedIndexChanged">
             <Columns>
                 <asp:CommandField SelectText="View" ShowSelectButton="True" CausesValidation="false"></asp:CommandField>
                 <asp:TemplateField HeaderText="Album">
@@ -63,7 +71,7 @@
             </EmptyDataTemplate>
         </asp:GridView>
         <br />
-        <asp:Label ID="label2" runat="server" Text="Album Id:"></asp:Label>
+        <asp:Label ID="label2" runat="server" Text="ALbum Id:"></asp:Label>
         &nbsp;&nbsp;
         <asp:Label ID="EditAlbumID" runat="server"></asp:Label>
         <br />
@@ -73,11 +81,10 @@
         <br />
          <asp:Label ID="label4" runat="server" Text="Artist" MaxLength="160"></asp:Label>
         &nbsp;&nbsp;
-       <asp:DropDownList ID="EditAlbumArtistList" runat="server"
+       <asp:DropDownList ID="EditAlbumArtistList" runat="server" 
            DataSourceID="EditArtistListODS" 
            DataTextField="Name" 
-           DataValueField="ArtistId">
-       </asp:DropDownList>
+           DataValueField="ArtistId"></asp:DropDownList>
         <br />
          <asp:Label ID="label5" runat="server" Text="Year:"></asp:Label>
         &nbsp;&nbsp;
@@ -89,31 +96,27 @@
         <br />
         <asp:LinkButton ID="Add" runat="server" OnClick="Add_Click" >Add</asp:LinkButton> &nbsp;&nbsp;
         <asp:LinkButton ID="Update" runat="server" OnClick="Update_Click" >Update</asp:LinkButton> &nbsp;&nbsp;
-        <asp:LinkButton ID="Remove" runat="server" CausesValidation="false" OnClick="Remove_Click" OnClientClick="return confirm('Are you sure you wish Too remove this album from the collection')">Remove</asp:LinkButton>
+        <asp:LinkButton ID="Remove" runat="server" CausesValidation="false" 
+            OnClick="Remove_Click"
+            OnClientClick="return confirm('Are you sure you wish to remove this album from the collection.')" >Remove</asp:LinkButton>
     </div>
     <asp:ObjectDataSource ID="AlbumListODS" runat="server" 
         OldValuesParameterFormatString="original_{0}" 
         SelectMethod="Album_FindByArtist" 
         TypeName="ChinookSystem.BLL.AlbumController"
-        OnSelected="CheckForException">
+         OnSelected="CheckForException"
+        >
         <SelectParameters>
-            <asp:ControlParameter ControlID="ArtistList"
-                PropertyName="SelectedValue" DefaultValue="0"
-                Name="artistid" 
-                Type="Int32">
+            <asp:ControlParameter ControlID="ArtistList" 
+                PropertyName="SelectedValue" DefaultValue="0" 
+                Name="artistid" Type="Int32">
             </asp:ControlParameter>
         </SelectParameters>
     </asp:ObjectDataSource>
-
-
     <asp:ObjectDataSource ID="EditArtistListODS" runat="server" 
         OldValuesParameterFormatString="original_{0}" 
-        SelectMethod="Artist_Get" 
+        SelectMethod="Artist_List" 
         TypeName="ChinookSystem.BLL.ArtistController"
          OnSelected="CheckForException">
-        <SelectParameters>
-            <asp:ControlParameter ControlID="ArtistList" PropertyName="SelectedValue" DefaultValue="0" Name="artistid" Type="Int32"></asp:ControlParameter>
-
-        </SelectParameters>
     </asp:ObjectDataSource>
 </asp:Content>

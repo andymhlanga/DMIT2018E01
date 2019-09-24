@@ -8,7 +8,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{61C696AC-78A4-4FB8-AEAC-CF79127CAC12}</ProjectGuid>
+    <ProjectGuid>{F71BDD2C-E06C-4453-A9EF-CDB1BE158D00}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -424,11 +424,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChinookSystem.Data\ChinookSystem.Data.csproj">
-      <Project>{86165d96-58d0-4e7f-a719-dcf5628ea0a6}</Project>
+      <Project>{5952bd88-d024-460f-b1dd-122f1e9286f1}</Project>
       <Name>ChinookSystem.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\ChinookSystem\ChinookSystem.csproj">
-      <Project>{3a5caf97-8185-4287-af80-047d6b4d71b3}</Project>
+      <Project>{4d7749be-581c-4e0a-9776-ddb094130279}</Project>
       <Name>ChinookSystem</Name>
     </ProjectReference>
   </ItemGroup>
@@ -445,7 +445,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>53503</DevelopmentServerPort>
+          <DevelopmentServerPort>50979</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:44352/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

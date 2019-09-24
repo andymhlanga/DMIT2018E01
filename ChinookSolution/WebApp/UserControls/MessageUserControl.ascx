@@ -1,5 +1,6 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MessageUserControl.ascx.cs" Inherits="DMIT2018Common.UserControls.MessageUserControl" %>
- 
+﻿<%@ Control Language="C#" AutoEventWireup="true" 
+    CodeBehind="MessageUserControl.ascx.cs" 
+    Inherits="DMIT2018Common.UserControls.MessageUserControl" %>
 <asp:Panel ID="MessagePanel" runat="server">
     <div class="panel-heading">
         <asp:Label ID="MessageTitleIcon" runat="server"> </asp:Label>
@@ -11,7 +12,7 @@
             <headertemplate>
                 <ul>
             </headertemplate>
- <itemtemplate>
+<itemtemplate>
                 <li><%# Eval("Error") %></li>
             </itemtemplate>
             <footertemplate>

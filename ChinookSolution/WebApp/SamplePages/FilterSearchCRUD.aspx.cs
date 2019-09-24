@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-#region Additional NameSpaces
+#region Additional Namespaces
 using ChinookSystem.BLL;
 using ChinookSystem.Data.Entities;
 #endregion
@@ -19,58 +19,50 @@ namespace WebApp.SamplePages
             if (!Page.IsPostBack)
             {
                 BindArtistList();
-                //set the max value for the validation control
+                //set the max value for the Validation control
                 //RangeEditReleaseYear
                 RangeEditReleaseYear.MaximumValue = DateTime.Today.Year.ToString();
-            }                                                         
-          
+            }
         }
 
         protected void BindArtistList()
         {
-
             ArtistController sysmgr = new ArtistController();
             List<Artist> info = sysmgr.Artist_List();
-            //descending order flip x and y
             info.Sort((x, y) => x.Name.CompareTo(y.Name));
             ArtistList.DataSource = info;
             ArtistList.DataTextField = nameof(Artist.Name);
             ArtistList.DataValueField = nameof(Artist.ArtistId);
             ArtistList.DataBind();
-          //ArtistList.Items.Insert(0,"Select........");
-
+            //ArtistList.Items.Insert(0, "select ...");
         }
 
-        //in code beind to called from ODS
-        protected void CheckForException(object sender,ObjectDataSourceStatusEventArgs e)
+        //in code behind to be called from ODS
+        protected void CheckForException(object sender, ObjectDataSourceStatusEventArgs e)
         {
             MessageUserControl.HandleDataBoundException(e);
-
         }
-
 
 
         protected void AlbumList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //standard lookup refence row by index this is not equivalent to the record num in the dataset
+            //standard lookup
             GridViewRow agvrow = AlbumList.Rows[AlbumList.SelectedIndex];
-            //retrieve the value from a web control located within 
-            //the GridView cell
-            string albumid = (agvrow.FindControl("AlbumId") as Label).Text; //proper access technique
+            //retreive the value from a web control located within
+            //   the GridView cell
+            string albumid = (agvrow.FindControl("AlbumId") as Label).Text;
 
-            //error handling will need to be added 
+            //error handling will need to be added
             MessageUserControl.TryRun(() =>
             {
-                AlbumController sysmgr = new AlbumController();  //instance of the controller
+                //place your processing code
+                AlbumController sysmgr = new AlbumController();
                 Album datainfo = sysmgr.Album_Get(int.Parse(albumid));
-               
+                
                 if (datainfo == null)
                 {
                     ClearControls();
-                    throw new Exception("Record  no longer exists on file.");
-
-
-
+                    throw new Exception("Record no longer exists on file.");
                 }
                 else
                 {
@@ -78,13 +70,11 @@ namespace WebApp.SamplePages
                     EditTitle.Text = datainfo.Title;
                     EditAlbumArtistList.SelectedValue = datainfo.ArtistId.ToString();
                     EditReleaseYear.Text = datainfo.ReleaseYear.ToString();
-                    EditReleaseLabel.Text = datainfo.ReleaseLabel == null ? "" : datainfo.ReleaseLabel;
-
+                    EditReleaseLabel.Text =
+                        datainfo.ReleaseLabel == null ? "" : datainfo.ReleaseLabel;
                 }
-
-
-            },"Find Album","Album Found"); //message title and string success message 
-            
+            },"Find Album", "Album found"); //strings on this line are success message
+           
         }
 
         protected void ClearControls()
@@ -94,17 +84,16 @@ namespace WebApp.SamplePages
             EditReleaseYear.Text = "";
             EditReleaseLabel.Text = "";
             EditAlbumArtistList.SelectedIndex = 0;
-
         }
-
         protected void Add_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
                 string albumtitle = EditTitle.Text;
                 int albumyear = int.Parse(EditReleaseYear.Text);
-                string albumlabel = EditReleaseLabel.Text == "" ? null: EditReleaseLabel.Text;
-                int albumartist= int.Parse(EditAlbumArtistList.SelectedValue);
+                string albumlabel = EditReleaseLabel.Text == "" ? 
+                        null : EditReleaseLabel.Text;
+                int albumartist = int.Parse(EditAlbumArtistList.SelectedValue);
 
                 Album theAlbum = new Album();
                 theAlbum.Title = albumtitle;
@@ -119,10 +108,9 @@ namespace WebApp.SamplePages
                     EditAlbumID.Text = albumid.ToString();
                     if (AlbumList.Rows.Count > 0)
                     {
-                        AlbumList.DataBind(); //Repopulate the ODS album list 
-                    }                   
-
-                },"Successful", "Album Added");
+                        AlbumList.DataBind();
+                    }
+                },"Successful","Album added");
             }
         }
 
@@ -130,44 +118,40 @@ namespace WebApp.SamplePages
         {
             if (Page.IsValid)
             {
-                int  editalbumid = 0;
+                int editalbumid = 0;
                 string albumid = EditAlbumID.Text;
                 if (string.IsNullOrEmpty(albumid))
                 {
-                    MessageUserControl.ShowInfo("Attention!","lookup albulm id before editing"); // show info takes a message and displays it there is a title and message.
+                    MessageUserControl.ShowInfo("Attention","Lookup the album before editing");
                 }
-                else if (int.TryParse(albumid, out editalbumid))
+                else if (!int.TryParse(albumid, out editalbumid))
                 {
-                    MessageUserControl.ShowInfo("Attention!", "Curerent album ID is invalid");
+                    MessageUserControl.ShowInfo("Attention","Current albumid is invalid. Preform lookukp again.");
                 }
-                
-                string albumtitle = EditTitle.Text;
-                int albumyear = int.Parse(EditReleaseYear.Text);
-                string albumlabel = EditReleaseLabel.Text == "" ? null : EditReleaseLabel.Text;
-                int albumartist = int.Parse(EditAlbumArtistList.SelectedValue);
-
-                Album theAlbum = new Album();
-                theAlbum.AlbumId = editalbumid;
-                theAlbum.Title = albumtitle;
-                theAlbum.ArtistId = albumartist;
-                theAlbum.ReleaseYear = albumyear;
-                theAlbum.ReleaseLabel = albumlabel;
-
-                MessageUserControl.TryRun(() =>
+                else
                 {
-                    AlbumController sysmgr = new AlbumController();
-                    int rowsaffected = sysmgr.Album_Update(theAlbum);
-                    if (rowsaffected > 0)
-                    {
-                        AlbumList.DataBind(); //Repopulate the ODS album list 
-                    }
-                    else
-                    {
-                        throw new Exception("Album was not found. Repeat lookup and update again"); //this will be caught by the message user control exceptions you have to use them yourself.
-                    }
+                    Album theAlbum = new Album();
+                    theAlbum.AlbumId = editalbumid;  //include pkey
+                    theAlbum.Title = EditTitle.Text;
+                    theAlbum.ArtistId = int.Parse(EditAlbumArtistList.SelectedValue);
+                    theAlbum.ReleaseYear = int.Parse(EditReleaseYear.Text); ;
+                    theAlbum.ReleaseLabel = EditReleaseLabel.Text == "" ?
+                            null : EditReleaseLabel.Text;
 
-                }, "Successful", "Album Updated");
-
+                    MessageUserControl.TryRun(() =>
+                    {
+                        AlbumController sysmgr = new AlbumController();
+                        int rowsaffected = sysmgr.Album_Update(theAlbum);
+                        if (rowsaffected > 0)
+                        {
+                            AlbumList.DataBind();
+                        }
+                        else
+                        {
+                            throw new Exception("Album was not found. Repeat lookup and update again.");
+                        }
+                    }, "Successful", "Album updated");
+                }
             }
         }
 
@@ -177,11 +161,11 @@ namespace WebApp.SamplePages
             string albumid = EditAlbumID.Text;
             if (string.IsNullOrEmpty(albumid))
             {
-                MessageUserControl.ShowInfo("Attention!", "lookup albulm id before editing"); // show info takes a message and displays it there is a title and message.
+                MessageUserControl.ShowInfo("Attention", "Lookup the album before editing");
             }
-            else if (int.TryParse(albumid, out editalbumid))
+            else if (!int.TryParse(albumid, out editalbumid))
             {
-                MessageUserControl.ShowInfo("Attention!", "Current album ID is invalid");
+                MessageUserControl.ShowInfo("Attention", "Current albumid is invalid. Preform lookukp again.");
             }
             else
             {
@@ -191,17 +175,15 @@ namespace WebApp.SamplePages
                     int rowsaffected = sysmgr.Album_Delete(editalbumid);
                     if (rowsaffected > 0)
                     {
-                        AlbumList.DataBind(); //Repopulate the ODS album list 
+                        AlbumList.DataBind();
                         EditAlbumID.Text = "";
-                }
+                    }
                     else
                     {
-                        throw new Exception("Album was not found. Repeat lookup and remove again"); //this will be caught by the message user control exceptions you have to use them yourself.
-                }
-
+                        throw new Exception("Album was not found. Repeat lookup and remove again.");
+                    }
                 }, "Successful", "Album Removed");
             }
-
         }
     }
- }
+}

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{86165D96-58D0-4E7F-A719-DCF5628EA0A6}</ProjectGuid>
+    <ProjectGuid>{5952BD88-D024-460F-B1DD-122F1E9286F1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ChinookSystem.Data</RootNamespace>
