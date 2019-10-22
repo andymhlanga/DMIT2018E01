@@ -11,8 +11,6 @@ using System.ComponentModel;
 using DMIT2018Common.UserControls;
 using ChinookSystem.Data.POCOs;
 using ChinookSystem.Data.DTOs;
-
-
 #endregion
 
 namespace ChinookSystem.BLL
@@ -153,6 +151,8 @@ namespace ChinookSystem.BLL
         {
             return Album_Delete(item.AlbumId);
         }
+
+
         public int Album_Delete(int albumid)
         {
             using (var context = new ChinookContext())
@@ -170,6 +170,23 @@ namespace ChinookSystem.BLL
             }
        
         }
+
+
+        //[DataObjectMethod(DataObjectMethodType.Select, false)]
+        //public List<SelectionList> List_AlbumNames()
+        //{
+        //    using (var context = new ChinookContext())
+        //    {
+        //        var results = from x in context.Albums
+        //                      orderby x.Title
+        //                      select new SelectionList
+        //                      {
+        //                          IDValueField = x.AlbumId,
+        //                          DisplayText = x.Title
+        //                      };
+        //        return results.ToList();
+        //    }
+        //}
 
         #endregion
 

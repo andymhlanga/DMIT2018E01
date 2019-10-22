@@ -26,13 +26,14 @@
 
         <ItemTemplate>
             <h5><strong>Album: <%# Item.AlbumTitle %></strong></h5>
-            <p><strong>Artist:  <%# Item.AlbumArtist %></strong> 
+            <p>
+                <strong>Artist:  <%# Item.AlbumArtist %></strong>
                 # of Tracks: <%# Item.TrackCount %>
                 Play Time: <%# Item.PlayTime %>
             </p>
             <asp:GridView ID="TrackList" runat="server"
-                 DataSource ="<%# Item.AlbumTracks %>"
-                 CssClass="table" GridLines="Horizontal" BorderStyle="None">
+                DataSource="<%# Item.AlbumTracks %>"
+                CssClass="table" GridLines="Horizontal" BorderStyle="None">
             </asp:GridView>
         </ItemTemplate>
         <FooterTemplate>
