@@ -104,8 +104,28 @@ namespace Jan2018DemoWebsite.SamplePages
 
         protected void PlayListFetch_Click(object sender, EventArgs e)
         {
-            //code to go here
+            if (string.IsNullOrEmpty(PlaylistName.Text))
+            {
+                MessageUserControl.ShowInfo("Required Data","Play List name is required to fetch a playlist");
+            }
+            else
+            {
+                string playlistname = PlaylistName.Text;
+                //until we do security, we will use a hard coded username
+                string username = "HansenB";
 
+                //do a standard query look up to your controller use
+                //message user control for error handling
+                MessageUserControl.TryRun(() =>
+                {
+                    PlaylistTracksController sysmgr = new PlaylistTracksController();
+                    List<UserPlaylistTrack> datainfo = sysmgr.List_TracksForPlaylist(
+                        playlistname, username);
+                    PlayList.DataSource = datainfo;
+                    PlayList.DataBind();
+
+                },"Playlist Tracks", "See list of current tracks below");
+            }
         }
 
         protected void MoveDown_Click(object sender, EventArgs e)
