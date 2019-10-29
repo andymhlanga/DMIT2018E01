@@ -53,6 +53,7 @@
             <AlternatingItemTemplate>
                 <tr style="background-color: #FFFFFF; color: #284775;">
                     <td>
+                        <%--java script 3.3.1 boot strap remove glyphicon control boot strap 3.4 does not support it. --%>
                         <asp:LinkButton ID="AddtoPlaylist" runat="server"
                              CssClass="btn" CommandArgument='<%# Eval("TrackID") %>'>
                             <span aria-hidden="true" class="glyphicon glyphicon-plus">&nbsp;</span>

@@ -115,7 +115,7 @@ namespace ChinookSystem.BLL
                     }else
 
                     {
-                        reasons.Add("Track already exusts on playlist");
+                        reasons.Add("Track already exists on playlist");
                     }
 
                 }
