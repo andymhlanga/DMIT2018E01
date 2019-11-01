@@ -20,7 +20,7 @@
     <br />
     <asp:ListView ID="AlbumList" runat="server" 
         DataSourceID="AlbumListODS"  DataKeyNames="AlbumId"
-        InsertItemPosition="LastItem">
+        InsertItemPosition="LastItem" >
         <AlternatingItemTemplate>
             <tr style="background-color: #FFFFFF; color: #284775;">
                 <td>
@@ -62,7 +62,7 @@
                  ControlToValidate="TitleTextBoxE" ValidationGroup="EGroup"
                  ValidationExpression="^.{1,160}$">
             </asp:RegularExpressionValidator>
-           <%-- <asp:RequiredFieldValidator ID="RequiredReleaseYearTextBoxE" runat="server" 
+<%--            <asp:RequiredFieldValidator ID="RequiredReleaseYearTextBoxE" runat="server" 
                 ErrorMessage="Year is required" Display="None" 
                  ControlToValidate="ReleaseYearTextBoxE" ValidationGroup="EGroup">
             </asp:RequiredFieldValidator>
@@ -80,7 +80,7 @@
             <tr style="background-color: #999999;">
                 <td>
                     <asp:Button runat="server" CommandName="Update" Text="Update" ID="UpdateButton" 
-                         ValidationGroup="EGroup"/>
+                         ValidationGroup="EGroup" />
                     <asp:Button runat="server" CommandName="Cancel" Text="Cancel" ID="CancelButton" />
                 </td>
                 <td>
@@ -125,7 +125,7 @@
                  ControlToValidate="TitleTextBoxI" ValidationGroup="IGroup"
                  ValidationExpression="^.{1,160}$">
             </asp:RegularExpressionValidator>
-        <%--    <asp:RequiredFieldValidator ID="RequiredReleaseYearTextBoxI" runat="server" 
+<%--            <asp:RequiredFieldValidator ID="RequiredReleaseYearTextBoxI" runat="server" 
                 ErrorMessage="Year is required" Display="None" 
                  ControlToValidate="ReleaseYearTextBoxI" ValidationGroup="IGroup">
             </asp:RequiredFieldValidator>
@@ -273,10 +273,10 @@
         OldValuesParameterFormatString="original_{0}" 
         TypeName="ChinookSystem.BLL.AlbumController"
          OnDeleted="CheckForException"
-         OnInserted="CheckForException"
-         OnUpdated="CheckForException"
-         OnSelected="CheckForException"
-        >
+         OnInserted="InsertCheckForException"
+         OnUpdated="UpdateCheckForException"
+         OnSelected="DeleteCheckForException"
+         >
     </asp:ObjectDataSource>
     <asp:ObjectDataSource ID="ArtistListODS" runat="server" 
         OldValuesParameterFormatString="original_{0}" 

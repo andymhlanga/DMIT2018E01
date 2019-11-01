@@ -8,8 +8,8 @@ using System.Web.UI.WebControls;
 #region Additonal Namespaces
 using ChinookSystem.BLL;
 using ChinookSystem.Data.POCOs;
+using DMIT2018Common.UserControls;
 
-//using WebApp.Security;
 #endregion
 
 namespace Jan2018DemoWebsite.SamplePages
@@ -28,86 +28,79 @@ namespace Jan2018DemoWebsite.SamplePages
 
         protected void ArtistFetch_Click(object sender, EventArgs e)
         {
-
-            //first thing we do is validation
-            if (String.IsNullOrEmpty(ArtistName.Text))
+            if (string.IsNullOrEmpty(ArtistName.Text))
             {
-                //using MessageUserControl
-                MessageUserControl.ShowInfo("Missing Data", "Enter a partial artist name");
+                //using MessageUserControl to display a message
+                MessageUserControl.ShowInfo("Missing Data", 
+                    "Enter a partial artist name.");
             }
             else
             {
                 MessageUserControl.TryRun(() =>
                 {
-
                     SearchArg.Text = ArtistName.Text;
                     TracksBy.Text = "Artist";
-                    TracksSelectionList.DataBind(); //Causes the ODS to execute
-
-                }, "Tracks Search", "Select from the following list to add to your play list");
-
+                    TracksSelectionList.DataBind(); //cause the ODS to execute
+                }, "Track Search",
+                "Select from the following list to add to your playlist");
             }
+               
 
-        }
+         }
 
         protected void MediaTypeFetch_Click(object sender, EventArgs e)
         {
-
+            
             MessageUserControl.TryRun(() =>
             {
-
                 SearchArg.Text = MediaTypeDDL.SelectedValue;
                 TracksBy.Text = "MediaType";
-                TracksSelectionList.DataBind(); //Causes the ODS to execute
-
-                }, "Tracks Search", "Select from the following list to add to your play list");
-
+                TracksSelectionList.DataBind(); //cause the ODS to execute
+            }, "Track Search",
+            "Select from the following list to add to your playlist");
 
 
         }
 
         protected void GenreFetch_Click(object sender, EventArgs e)
         {
-
             MessageUserControl.TryRun(() =>
             {
-
                 SearchArg.Text = GenreDDL.SelectedValue;
                 TracksBy.Text = "Genre";
-                TracksSelectionList.DataBind(); //Causes the ODS to execute
-
-            }, "Tracks Search", "Select from the following list to add to your play list");
+                TracksSelectionList.DataBind(); //cause the ODS to execute
+            }, "Track Search",
+            "Select from the following list to add to your playlist");
 
         }
 
         protected void AlbumFetch_Click(object sender, EventArgs e)
         {
-
-            if (String.IsNullOrEmpty(AlbumTitle.Text))
+            if (string.IsNullOrEmpty(AlbumTitle.Text))
             {
-                //using MessageUserControl
-                MessageUserControl.ShowInfo("Missing Data", "Enter a partial album title");
+                //using MessageUserControl to display a message
+                MessageUserControl.ShowInfo("Missing Data",
+                    "Enter a partial album title.");
             }
             else
             {
                 MessageUserControl.TryRun(() =>
                 {
-
                     SearchArg.Text = AlbumTitle.Text;
                     TracksBy.Text = "Album";
-                    TracksSelectionList.DataBind(); //Causes the ODS to execute
-
-                }, "Tracks Search", "Select from the following list to add to your play list");
-
+                    TracksSelectionList.DataBind(); //cause the ODS to execute
+                }, "Track Search",
+                "Select from the following list to add to your playlist");
             }
 
         }
 
         protected void PlayListFetch_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(PlaylistName.Text))
+            if(string.IsNullOrEmpty(PlaylistName.Text))
             {
-                MessageUserControl.ShowInfo("Required Data", "Play List name is required to fetch a playlist");
+                MessageUserControl.ShowInfo("Required Data",
+                    "Play list name is required to fetch a play list");
             }
             else
             {
@@ -115,8 +108,8 @@ namespace Jan2018DemoWebsite.SamplePages
                 //until we do security, we will use a hard coded username
                 string username = "HansenB";
 
-                //do a standard query look up to your controller use
-                //message user control for error handling
+                //do a standard query lookup to your control
+                //use MessageUserControl for error handling
                 MessageUserControl.TryRun(() =>
                 {
                     PlaylistTracksController sysmgr = new PlaylistTracksController();
@@ -124,224 +117,194 @@ namespace Jan2018DemoWebsite.SamplePages
                         playlistname, username);
                     PlayList.DataSource = datainfo;
                     PlayList.DataBind();
-
-                }, "Playlist Tracks", "See list of current tracks below");
+                },"Playlist Tracks","See current tracks on playlist below");
             }
+ 
         }
 
         protected void MoveDown_Click(object sender, EventArgs e)
         {
             List<string> reasons = new List<string>();
-            //is there a playlist check gridview to see if there is something
-            //no msg
-            if (PlayList.Rows.Count == 0)
+            //is there a playlist?
+            //    no msg
+            if(PlayList.Rows.Count == 0)
             {
-                reasons.Add("There is no playlist present fetch your playlist");
+                reasons.Add("There is no playlist present. Fetch your playlist.");
             }
-
-            //yes check is there a playlist name??
-            //no msg
+            //is there a playlist name??
+            //    no msg
             if (string.IsNullOrEmpty(PlaylistName.Text))
             {
-                reasons.Add("You must have a  playlist name");
+                reasons.Add("You must have a playlist name.");
             }
-            ////traverse playlist and collect selected row or rows
-            // > 1 1 row selected.
-            //bad msg
+            //traverse playlist to collect selected row(s)
+            //> 1 row selected
+            //    bad msg
             int trackid = 0;
             int tracknumber = 0;
             int rowsSelected = 0;
             CheckBox playlistselection = null;
-
-            //a grid view is no more than a display of a list / a list of records 1,2,3,4,5,etc
-            for (int rowindex = 0; rowindex < PlayList.Rows.Count; rowindex++)
+            for (int rowindex=0; rowindex < PlayList.Rows.Count; rowindex++)
             {
-                //access the checboxcontrol on the indexed GridViewRow
+                //access the checkbox control on the indexed GridViewRow
                 //set the CheckBox pointer to this checkbox control
                 playlistselection = PlayList.Rows[rowindex].FindControl("Selected") as CheckBox;
                 if (playlistselection.Checked)
                 {
                     //increase selected number of rows
                     rowsSelected++;
-
-                    //gather the data needed for the DLL call 
+                    //gather the data needed for the BLL call
                     trackid = int.Parse((PlayList.Rows[rowindex].FindControl("TrackID") as Label).Text);
                     tracknumber = int.Parse((PlayList.Rows[rowindex].FindControl("TrackNumber") as Label).Text);
-
                 }
             }
             if (rowsSelected != 1)
             {
-                reasons.Add("Select only one track at a time");
+                reasons.Add("Select only one track to move.");
             }
-
-
             //check if last track
-            //bad msg
-            //validation good move track 
+            //    bad msg
             if (tracknumber == PlayList.Rows.Count)
             {
-                reasons.Add("Last Track cannot be moved");
+                reasons.Add("Last track cannot be moved down");
             }
-
-
-            //valid good
-            if(reasons.Count == 0)
+            //validation good
+            if (reasons.Count == 0)
             {
-                //yes move 
+                //   yes: move track
                 MoveTrack(trackid, tracknumber, "down");
             }
             else
             {
-                //no display errors
-                //MessageUserControl.TryRun(() =>
-                //{
-                //    throw new BusinessRuleException("Move Track Erros",reasons);
-
-                //});
+                //    no: display all errors
+                MessageUserControl.TryRun(() => {
+                    throw new BusinessRuleException("Track Move Errors:", reasons);
+                });
             }
-
+            
+            
+ 
         }
-
-        
 
         protected void MoveUp_Click(object sender, EventArgs e)
         {
             List<string> reasons = new List<string>();
-            //is there a playlist check gridview to see if there is something
-            //no msg
+            //is there a playlist?
+            //    no msg
             if (PlayList.Rows.Count == 0)
             {
-                reasons.Add("There is no playlist present fetch your playlist");
+                reasons.Add("There is no playlist present. Fetch your playlist.");
             }
-
-            //yes check is there a playlist name??
-            //no msg
+            //is there a playlist name??
+            //    no msg
             if (string.IsNullOrEmpty(PlaylistName.Text))
             {
-                reasons.Add("You must have a  playlist name");
+                reasons.Add("You must have a playlist name.");
             }
-            ////traverse playlist and collect selected row or rows
-            // > 1 1 row selected.
-            //bad msg
+            //traverse playlist to collect selected row(s)
+            //> 1 row selected
+            //    bad msg
             int trackid = 0;
             int tracknumber = 0;
             int rowsSelected = 0;
             CheckBox playlistselection = null;
-
-            //a grid view is no more than a display of a list / a list of records 1,2,3,4,5,etc
             for (int rowindex = 0; rowindex < PlayList.Rows.Count; rowindex++)
             {
-                //access the checboxcontrol on the indexed GridViewRow
+                //access the checkbox control on the indexed GridViewRow
                 //set the CheckBox pointer to this checkbox control
                 playlistselection = PlayList.Rows[rowindex].FindControl("Selected") as CheckBox;
                 if (playlistselection.Checked)
                 {
                     //increase selected number of rows
                     rowsSelected++;
-
-                    //gather the data needed for the DLL call 
+                    //gather the data needed for the BLL call
                     trackid = int.Parse((PlayList.Rows[rowindex].FindControl("TrackID") as Label).Text);
                     tracknumber = int.Parse((PlayList.Rows[rowindex].FindControl("TrackNumber") as Label).Text);
-
                 }
             }
-            if (rowsSelected == 1)
+            if (rowsSelected != 1)
             {
-                reasons.Add("you cannot move the track up");
+                reasons.Add("Select only one track to move.");
             }
-
-
             //check if last track
-            //bad msg
-            //validation good move track 
-            if (tracknumber == PlayList.Rows.Count)
+            //    bad msg
+            if (tracknumber == 1)
             {
-                reasons.Add("Last Track cannot be moved");
+                reasons.Add("First track cannot be moved up");
             }
-
-
-            //valid good
+            //validation good
             if (reasons.Count == 0)
             {
-                //yes move 
+                //   yes: move track
                 MoveTrack(trackid, tracknumber, "up");
             }
             else
             {
-                //no display errors
-                //MessageUserControl.TryRun(() =>
-                //{
-                //    throw new BusinessRuleException("Move Track Erros",reasons);
-
-                //});
+                //    no: display all errors
+                MessageUserControl.TryRun(() => {
+                    throw new BusinessRuleException("Track Move Errors:", reasons);
+                });
             }
 
         }
 
         protected void MoveTrack(int trackid, int tracknumber, string direction)
         {
+            //call BLL to move track
             MessageUserControl.TryRun(() => {
-
                 PlaylistTracksController sysmgr = new PlaylistTracksController();
-                sysmgr.MoveTrack("HansenB",PlaylistName.Text,trackid,tracknumber,direction) ;
+                sysmgr.MoveTrack("HansenB", PlaylistName.Text, trackid, tracknumber, direction);
                 List<UserPlaylistTrack> datainfo = sysmgr.List_TracksForPlaylist(
-                       PlaylistName.Text, "HansenB");
+                        PlaylistName.Text, "HansenB");
                 PlayList.DataSource = datainfo;
                 PlayList.DataBind();
-
-            }, "Success", "Track has been moved");
-
+            },"Success","Track has been moved");
+ 
         }
 
 
         protected void DeleteTrack_Click(object sender, EventArgs e)
         {
             //code to go here
-
+ 
         }
 
-        protected void TracksSelectionList_ItemCommand(object sender,
+        protected void TracksSelectionList_ItemCommand(object sender, 
             ListViewCommandEventArgs e)
         {
-            //do we have the playlist name 
-            if (String.IsNullOrEmpty(PlaylistName.Text))
+            //do we have the playlist name
+            if (string.IsNullOrEmpty(PlaylistName.Text))
             {
-                MessageUserControl.ShowInfo("Required Data", "Play List name is required to add track");
+                MessageUserControl.ShowInfo("Required Data",
+                    "Play list name is required to add a track");
             }
             else
             {
-                //collect the required data for the event 
+                //collect the required data for the event
                 string playlistname = PlaylistName.Text;
-                //username will come from the form security
-                //so until security is added we will use HansenB
+                //the username will come from the form security
+                //so until security is added, we will use HansenB
                 string username = "HansenB";
-                //obtain the track ID from the List View
-                //the track ID will be in the CommandArg property of the 
-                // ListViewCommandEventArgs e instance
-                //the command arg in e is returned as an object and has to be cast as a string and parsed to an int
+                //obtain the track id from the ListView
+                //the track id will be in the CommandArg property of the 
+                //    ListViewCommandEventArgs e instance
+                //the Commandarg in e is return as an object
+                //case it to a string, then you can .Parse the string
                 int trackid = int.Parse(e.CommandArgument.ToString());
 
-                //using the obtained data, issue your call to the DLL method
-                //this work will be done within a try run()
-
-                MessageUserControl.TryRun(()=> {
-                    //call a method pass the data to our BLL
+                //using the obtained data, issue your call to the BLL method
+                //this work will be done within a TryRun()
+                MessageUserControl.TryRun(() =>
+                {
                     PlaylistTracksController sysmgr = new PlaylistTracksController();
-                    //THERE IS only one call to add the data to the data base
+                    //there is ONLY one call to add the data to the database
                     sysmgr.Add_TrackToPLaylist(playlistname, username, trackid);
-                    //the refresh of the playlist is a READ.
-                    //refresh the playlist
-                    //boroowed from fetch playlist to bind the list.
+                    //refresh the playlist is a READ
                     List<UserPlaylistTrack> datainfo = sysmgr.List_TracksForPlaylist(
                         playlistname, username);
                     PlayList.DataSource = datainfo;
                     PlayList.DataBind();
-
-
-
-                }, "Adding a track", "Track has been added to the playlist");
-
+                },"Adding a Track","Track has been added to the playlist");
             }
 
         }

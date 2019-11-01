@@ -1,12 +1,16 @@
 ﻿<%@ Page Title="OLTP Playlist" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ManagePlaylist.aspx.cs" Inherits="Jan2018DemoWebsite.SamplePages.ManagePlaylist" %>
+
 <%@ Register Src="~/UserControls/MessageUserControl.ascx" TagPrefix="uc1" TagName="MessageUserControl" %>
+
+
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <div>
     <h1>Manage Playlists (UI/UX TRX Sample)</h1>
 </div>
     <%--Add MessageUserControl--%>
-  <uc1:MessageUserControl runat="server" ID="MessageUserControl" />
+    <uc1:MessageUserControl runat="server" id="MessageUserControl" />
+
     <div class="row">
     <div class="col-sm-2">
         <asp:Label ID="Label1" runat="server" Text="Artist" ></asp:Label><br />
@@ -53,7 +57,6 @@
             <AlternatingItemTemplate>
                 <tr style="background-color: #FFFFFF; color: #284775;">
                     <td>
-                        <%--java script 3.3.1 boot strap remove glyphicon control boot strap 3.4 does not support it. --%>
                         <asp:LinkButton ID="AddtoPlaylist" runat="server"
                              CssClass="btn" CommandArgument='<%# Eval("TrackID") %>'>
                             <span aria-hidden="true" class="glyphicon glyphicon-plus">&nbsp;</span>
@@ -242,11 +245,14 @@
         OldValuesParameterFormatString="original_{0}" 
         SelectMethod="List_TracksForPlaylistSelection" 
         TypeName="ChinookSystem.BLL.TrackController"
-         OnSelected="CheckForException"
-         >
+         OnSelected="CheckForException">
         <SelectParameters>
-            <asp:ControlParameter ControlID="TracksBy" PropertyName="Text" Name="tracksby" Type="String"></asp:ControlParameter>
-            <asp:ControlParameter ControlID="SearchArg" PropertyName="Text" Name="arg" Type="String"></asp:ControlParameter>
+            <asp:ControlParameter ControlID="TracksBy" 
+                PropertyName="Text" Name="tracksby" Type="String">
+            </asp:ControlParameter>
+            <asp:ControlParameter ControlID="SearchArg" 
+                PropertyName="Text" Name="arg" Type="String">
+            </asp:ControlParameter>
         </SelectParameters>
     </asp:ObjectDataSource>
 

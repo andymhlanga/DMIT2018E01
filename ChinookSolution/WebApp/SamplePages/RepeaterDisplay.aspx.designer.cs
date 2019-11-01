@@ -13,13 +13,13 @@ namespace WebApp.SamplePages {
     public partial class RepeaterDisplay {
         
         /// <summary>
-        /// Repeater1 control.
+        /// AlbumTracksList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater Repeater1;
+        protected global::System.Web.UI.WebControls.Repeater AlbumTracksList;
         
         /// <summary>
         /// AlbumTracksListODS control.

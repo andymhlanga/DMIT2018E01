@@ -22,26 +22,26 @@ namespace ChinookSystem.BLL
         {
             using (var context = new ChinookContext())
             {
-
-                //what would happen if there is no match for the incoming parameter
+                //what would happen if there is no match for the
+                //   incoming parameter value
                 //we need to ensure that the results have a valid value
-                //this value will need to resolve to either a null or or an IEnumerable <T> collection
-                //to archieve a valid value you will need to determine
-                //using .FirstOrDefault() whether data exists or not
-
+                //this value will need to resolve to either a null OR
+                //  an IEnumerable<T> collection
+                //to achieve a valid value you will need to determine
+                // using .FirstOrDefault() whether data exists or not
                 var results = (from x in context.Playlists
                                where x.UserName.Equals(username)
-                               && x.Name.Equals(playlistname)
+                                && x.Name.Equals(playlistname)
                                select x).FirstOrDefault();
-                //if the play list does not exist .FirstOrDefault return a null
 
-                if(results == null)
+                //if the playlist does NOT exist .FirstOrDefault returns null
+                if (results == null)
                 {
                     return null;
                 }
                 else
                 {
-                    //iif the playlist does exist query for the playlist tracks
+                    //if the playlist does exists, query for the playlist tracks
                     var theTracks = from x in context.PlaylistTracks
                                     where x.PlaylistId.Equals(results.PlaylistId)
                                     orderby x.TrackNumber
@@ -55,106 +55,97 @@ namespace ChinookSystem.BLL
                                     };
                     return theTracks.ToList();
                 }
-            
-
             }
         }//eom
         public void Add_TrackToPLaylist(string playlistname, string username, int trackid)
         {
             using (var context = new ChinookContext())
             {
-                //Use buiness rule exception to throw errors to the webpage
+                //use the BusinessRuleException to throw errors to the web page
                 List<string> reasons = new List<string>();
                 PlaylistTrack newTrack = null;
                 int tracknumber = 0;
 
-                //Part One: 
-                //Dertimine if plalist exist
+                //Part One
+                //determine if the playlist exists
                 //query the table using the playlistname and username
-                //if the playlist exist,one will get a record, 
-                //if the playlist does not exist one will get a null
-                //to ensure these results the query will be wrapped in a .FirstOrDefault() rerturns first item or null
-
+                //if the playlist exist, one will get a record,
+                //if the playlist does not exist, one will get a null
+                //to ENSURE these results the query will be wrap in a .FirstOrDefault()
                 //Playlist exists = context.Playlists
-                //                   .Where(x => x.UserName.Equals(username, StringComparison.OrdinalIgnoreCase)
-                //                   && x.Name.Equals(playlistname, StringComparison.OrdinalIgnoreCase))
-                //                   .Select(x => x)
-                //                   .FirstOrDefault();
-
+                //                    .Where(x => x.UserName.Equals(username, StringComparison.OrdinalIgnoreCase)
+                //                             && x.Name.Equals(playlistname, StringComparison.OrdinalIgnoreCase))
+                //                    .Select(x => x)
+                //                    .FirstOrDefault();
                 Playlist exists = (from x in context.Playlists
                                    where x.UserName.Equals(username, StringComparison.OrdinalIgnoreCase)
-                                          && x.Name.Equals(playlistname, StringComparison.OrdinalIgnoreCase)
+                                      && x.Name.Equals(playlistname, StringComparison.OrdinalIgnoreCase)
                                    select x).FirstOrDefault();
 
-             //does the playlist exists
-             if(exists  == null)
+                //does the playlist exist
+                if (exists == null)
                 {
                     //this is a new playlist
-                    //create a new playlist record
+                    //create the Playlist record
                     exists = new Playlist();
                     exists.Name = playlistname;
                     exists.UserName = username;
                     //stage the add
                     exists = context.Playlists.Add(exists);
-                    //since this is a new play list 
+                    //since this is a new playlist
+                    //the tracknumber will be 1
                     tracknumber = 1;
-
                 }
                 else
                 {
-
-                    //since the playlist exists so may the track exists 
-                    //on the playlists tracks
-                    //single or default if its there check buisness rule
+                    //since the playlist exists, so may the track exist
+                    //   on the playlisttracks
                     newTrack = exists.PlaylistTracks
                         .SingleOrDefault(x => x.TrackId == trackid);
-
-                    if(newTrack == null)
+                    if (newTrack == null)
                     {
                         tracknumber = exists.PlaylistTracks.Count() + 1;
-                    }else
-
+                    }
+                    else
                     {
                         reasons.Add("Track already exists on playlist");
                     }
-
                 }
 
-             //Part 2 
-             //create the playlist track entry
-             //if there are any reasons NOT TO  create then throw the buisness rule exception
-             if(reasons.Count() > 0)
+                //Part Two
+                //create the PlaylistTrack entry
+                //if there are any reasons NOT to create then
+                //throw the BusinessRuleException
+                if (reasons.Count() > 0)
                 {
-                    //  i have an issue with adding the track 
-                    throw new BusinessRuleException("Adding tracks to playlist ", reasons);
+                    //issue with adding the track
+                    throw new BusinessRuleException("Adding track to playlist",
+                        reasons);
                 }
                 else
-
                 {
-                    //use the playlist navigation to Playlist tracks to
-                    //do the add to playlist tracks
+                    //use the Playlist navigation to PlaylistTracks to 
+                    // do the add to PlaylistTracks
                     newTrack = new PlaylistTrack();
                     newTrack.TrackId = trackid;
                     newTrack.TrackNumber = tracknumber;
 
-                    //how do i fill the playlistID if the playlist is brandnew?
-                    // a brandew playlist does not have an ID
-                    //Note the Pkey for PlayListID may not yet exist
-                    //                using the navigation property on the playlist entity 
-                    //one can let hash set handle the PlaylistId pkey value
-                    //to be properly created on PlayList AND placed correctly on the child record of 
-                    //PlayList tracks. if you dont use a nav property this will not work
+                    //how do I fill the PlayListID IF the playlist is brand new
+                    //a brand new playlist DOES NOT YET have an id
+                    //Note: the pkey for PlaylistID may not yet exist
+                    //      using the navigation property on the PlayList entity
+                    //      one can let HashSet handle the PlaylistId pkey value
+                    //      to be be properly created on PlayList AND placed
+                    //      correctly in the "child" record of PlaylistTracks
 
-                    //what is wrong is to attempt: // Hashset will handle the child
-                    //newTrack.PlaylistID = exists.PlaylistID;
-                    exists.PlaylistTracks.Add(newTrack); //this is the playlist track staging
+                    // what is wrong to the attempt:
+                    //   newTrack.PlaylistId = exists.PlaylistId;
+                    exists.PlaylistTracks.Add(newTrack);  //playlist track staging
 
-                    //physicall add any /all data to data base
+                    //physically add any/all data to the database
+                    //commit
                     context.SaveChanges();
-
-
                 }
-
 
             }
         }//eom
@@ -162,59 +153,58 @@ namespace ChinookSystem.BLL
         {
             using (var context = new ChinookContext())
             {
-                //get PlayList ID
+                //get Playlist ID
                 var exists = (from x in context.Playlists
                               where x.UserName.Equals(username, StringComparison.OrdinalIgnoreCase)
-                              && x.Name.Equals(playlistname, StringComparison.OrdinalIgnoreCase)
+                                 && x.Name.Equals(playlistname, StringComparison.OrdinalIgnoreCase)
                               select x).FirstOrDefault();
-
-                if(exists == null)
+                if (exists == null)
                 {
-                    throw new Exception("Playlist does not exist");
+                    throw new Exception("Playlist does not exist.");
                 }
                 else
                 {
                     PlaylistTrack moveTrack = (from x in exists.PlaylistTracks
                                                where x.TrackId == trackid
                                                select x).FirstOrDefault();
-
-                    if(moveTrack == null)
+                    if (moveTrack == null)
                     {
-                        throw new Exception("Playlist track does not exist");
-                    }else
+                        throw new Exception("Playlist does not exist.");
+                    }
+                    else
                     {
                         PlaylistTrack otherTrack = null;
-                        //test if it is going up or down 
+                        //up or down
                         if (direction.Equals("up"))
                         {
                             //up
-                            if(tracknumber == 1)
+                            if (tracknumber == 1)
                             {
                                 throw new Exception("Track 1 cannot be moved up.");
-                            }else
+                            }
+                            else
                             {
                                 //find the other track
-                               otherTrack = (from x in exists.PlaylistTracks
-                                                           where x.TrackNumber == moveTrack.TrackNumber - 1
-                                                           select x).FirstOrDefault();
-
-                                if(otherTrack == null)
+                                otherTrack = (from x in exists.PlaylistTracks
+                                              where x.TrackNumber == moveTrack.TrackNumber - 1
+                                              select x).FirstOrDefault();
+                                if (otherTrack == null)
                                 {
-                                    throw new Exception("Playlist is corrupt. Fetch playlist again");
-                                }else
+                                    throw new Exception("Play list is corrupt. Fetch play list again.");
+                                }
+                                else
                                 {
                                     moveTrack.TrackNumber -= 1;
                                     otherTrack.TrackNumber += 1;
                                 }
                             }
-
-
-                        }else
+                        }
+                        else
                         {
                             //down
                             if (tracknumber == exists.PlaylistTracks.Count())
                             {
-                                throw new Exception("Last Track  cannot be moved down.");
+                                throw new Exception("Last track cannot be moved down.");
                             }
                             else
                             {
@@ -222,10 +212,9 @@ namespace ChinookSystem.BLL
                                 otherTrack = (from x in exists.PlaylistTracks
                                               where x.TrackNumber == moveTrack.TrackNumber + 1
                                               select x).FirstOrDefault();
-
                                 if (otherTrack == null)
                                 {
-                                    throw new Exception("PlayList is corrupt. Fetch playlist again");
+                                    throw new Exception("Play list is corrupt. Fetch play list again.");
                                 }
                                 else
                                 {
@@ -233,9 +222,6 @@ namespace ChinookSystem.BLL
                                     otherTrack.TrackNumber -= 1;
                                 }
                             }
-
-
-
                         }//eof up or down
                         //staging
                         context.Entry(moveTrack).Property(y => y.TrackNumber).IsModified = true;

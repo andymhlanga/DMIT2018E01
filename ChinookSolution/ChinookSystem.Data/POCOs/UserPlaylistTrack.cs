@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ChinookSystem.Data.POCOs
-{ 
+{
     public class UserPlaylistTrack
     {
         public int TrackID { get; set; }

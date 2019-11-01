@@ -12,6 +12,5 @@ namespace ChinookSystem.Data.POCOs
         public string ArtistName { get; set; }
         public int RYear { get; set; }
         public string RLabel { get; set; }
-
     }
 }
