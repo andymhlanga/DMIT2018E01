@@ -1,2 +1,2 @@
-# DMIT2018E01
-public examples for nait DMIT2018 Course
+# dmit2018E01
+public examples for the Nait DMIT2018 course
