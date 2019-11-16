@@ -15,9 +15,8 @@ using ChinookSystem.Data.DTOs;
 
 namespace ChinookSystem.BLL
 {
-    class EmployeeController
+    public class EmployeeController
     {
-
         public List<string> Employees_GetTitles()
         {
             using (var context = new ChinookContext())

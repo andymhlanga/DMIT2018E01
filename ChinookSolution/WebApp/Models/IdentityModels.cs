@@ -7,26 +7,20 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebApp.Models;
+
+#region Additional Namespaces
 using WebApp.Security;
 using System.Data.Entity;
+#endregion
 
 namespace WebApp.Models
 {
     // You can add User data for the user by adding more properties to your User class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
-
         #region Custom Properties
-        //created the items below
         public int? EmployeeId { get; set; }
         public int? CustomerId { get; set; }
-
-
-
-
-
-
-
         #endregion
         public ClaimsIdentity GenerateUserIdentity(ApplicationUserManager manager)
         {
@@ -42,18 +36,11 @@ namespace WebApp.Models
         }
     }
 
-
-    //HOW do you this to execute 
-    //ADD using web.appsecurity
-    //ADD using system.data.entity
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            //When the security wants to use the app it will come in and execute this contructor
-            //first time you need to log on this thing will fire
-            //setup all the seeded information
             Database.SetInitializer<ApplicationDbContext>(new SecurityDbContextInitializer());
         }
 

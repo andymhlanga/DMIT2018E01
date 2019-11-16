@@ -240,57 +240,48 @@ namespace ChinookSystem.BLL
             using (var context = new ChinookContext())
             {
                 //playlist exists??
-               
-                
-              
-
                 var exists = (from x in context.Playlists
-                              where x.UserName.Equals(username, StringComparison.OrdinalIgnoreCase)
-                                 && x.Name.Equals(playlistname, StringComparison.OrdinalIgnoreCase)
+                              where x.UserName.Equals(username,StringComparison.OrdinalIgnoreCase)
+                                 && x.Name.Equals(playlistname,StringComparison.OrdinalIgnoreCase)
                               select x).FirstOrDefault();
-
-
-                if(exists == null)
-                     //no: message
-                {
-                    throw new Exception("Playlist has been removed from the system.");
+                if (exists == null)
+                { 
+                    //  no: message
+                    throw new Exception("Play list has been removed from the system");
                 }
                 else
                 {
-                    //yes: create a list of playlist tracks that are to be kept
-                    //List Any and All one thing in one list and not in another 
-                    //any match in my outer record in my inner Linq compare to List 
+                    //  yes: create a list of playlisttracks that are to be kept
                     List<PlaylistTrack> trackskept = exists.PlaylistTracks
-                        .Where(tr => !trackstodelete.Any(tod => tr.TrackId == tod))
-                        .Select(tr => tr)
-                        .ToList();
-                    //stage the removal of tracks 
-
+                            .Where(tr => !trackstodelete.Any(tod => tr.TrackId == tod))
+                            .Select(tr => tr)
+                            .ToList();
+                    //       stage the removal of tracks
                     PlaylistTrack item = null;
                     foreach (var dtrackid in trackstodelete)
                     {
                         item = exists.PlaylistTracks
-                               .Where(tr => tr.TrackId == dtrackid)
-                               .FirstOrDefault();
-
-                        if(item != null)
+                                .Where(tr => tr.TrackId == dtrackid)
+                                .FirstOrDefault();
+                        if (item != null)
                         {
                             exists.PlaylistTracks.Remove(item);
                         }
                     }
-                    //renumering of the kept tracks and stage update
-
+                    //       renumbering of kept tracks and stage update
                     int number = 1;
                     trackskept.Sort((x, y) => x.TrackNumber.CompareTo(y.TrackNumber));
                     foreach (var tkept in trackskept)
                     {
                         tkept.TrackNumber = number;
                         context.Entry(tkept).Property(y => y.TrackNumber).IsModified = true;
-                        number ++;
+                        number++;
                     }
+                    //       commit
                     context.SaveChanges();
-                          //commit
                 }
+
+
             }
         }//eom
     }

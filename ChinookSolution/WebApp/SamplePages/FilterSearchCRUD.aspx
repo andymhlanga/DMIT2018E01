@@ -35,7 +35,7 @@
         &nbsp;&nbsp;
         <asp:DropDownList ID="ArtistList" runat="server"></asp:DropDownList>
         &nbsp;&nbsp;
-        <asp:LinkButton ID="FetchAlbums" runat="server" CausesValidation="false">Fetch Albums</asp:LinkButton>
+        <asp:LinkButton ID="FetchAlbums" runat="server" CausesValidation="false" >Fetch Albums</asp:LinkButton>
         <br />
         <asp:GridView ID="AlbumList" runat="server"
             AutoGenerateColumns="false" AllowPaging="True"
@@ -100,7 +100,6 @@
             OnClick="Remove_Click"
             OnClientClick="return confirm('Are you sure you wish to remove this album from the collection.')" >Remove</asp:LinkButton>
     </div>
-
     <asp:ObjectDataSource ID="AlbumListODS" runat="server" 
         OldValuesParameterFormatString="original_{0}" 
         SelectMethod="Album_FindByArtist" 
@@ -114,8 +113,6 @@
             </asp:ControlParameter>
         </SelectParameters>
     </asp:ObjectDataSource>
-
-
     <asp:ObjectDataSource ID="EditArtistListODS" runat="server" 
         OldValuesParameterFormatString="original_{0}" 
         SelectMethod="Artist_List" 
