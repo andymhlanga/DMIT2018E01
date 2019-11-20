@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Data.Entity;
 using WebApp.Models;
 using ChinookSystem.BLL;
+using ChinookSystem.Data.POCOs;
 #endregion
 
 namespace WebApp.Security
@@ -59,17 +60,30 @@ namespace WebApp.Security
             }, userPassword);
             if (result.Succeeded)
                 userManager.AddToRole(userManager.FindByName("HansenB").Id, "Customers");
-            
+
             //seeding employees from the employee table
             //TODO:
             //retreive a List<Employee> from the database
+            //List<SelectionList> employeelogin = sysmgr.Employee_ListNames();
+
             //foreach employee
+            //foreach (var role in employeelogin)
+            //    result = userManager.Create(new ApplicationUser
+            //    {
+
+            //        UserName = role.LastName+ ,
+            //        Email = "HansenB@hotmail.somewhere.ca",
+            //        CustomerId = 4
+            //    }, userPassword);
+            //if (result.Succeeded)
+            //    userManager.AddToRole(userManager.FindByName("HansenB").Id, "Customers");
+
             //  UserName such as LastName and FirstInitial possible add a number
             //  Email of employee or null or add @Chinook.somewhere.ca to UserName
             //  Employee id is the pkey of the Employee record
             //  use the appSetting newUserPassword for the password
             //  Succeeded, role can come from the Employee record
-            
+
             #endregion
 
             // ... etc. ...

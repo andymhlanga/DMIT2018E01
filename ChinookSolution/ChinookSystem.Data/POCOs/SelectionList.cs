@@ -10,5 +10,7 @@ namespace ChinookSystem.Data.POCOs
     {
         public int IDValueField { get; set; }
         public string DisplayText { get; set; }
+        public string FirstName { get; set;}
+        public string LastName { get; set; }
     }
 }
