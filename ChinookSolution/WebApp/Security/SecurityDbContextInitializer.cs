@@ -64,26 +64,34 @@ namespace WebApp.Security
             //seeding employees from the employee table
             //TODO:
             //retreive a List<Employee> from the database
-            //List<SelectionList> employeelogin = sysmgr.Employee_ListNames();
 
-            //foreach employee
-            //foreach (var role in employeelogin)
-            //    result = userManager.Create(new ApplicationUser
-            //    {
 
-            //        UserName = role.LastName+ ,
-            //        Email = "HansenB@hotmail.somewhere.ca",
-            //        CustomerId = 4
-            //    }, userPassword);
-            //if (result.Succeeded)
-            //    userManager.AddToRole(userManager.FindByName("HansenB").Id, "Customers");
+            string employeeRole = ConfigurationManager.AppSettings["Employees"];
+            string employeePassword = ConfigurationManager.AppSettings["newUserPassword"];
+            List <SelectionList> employeelogin = sysmgr.Employee_ListNames();
+            ////foreach employee
 
+            foreach (var emp in employeelogin)
+            {
+
+                string firstinitial = emp.FirstName.Substring(0, 1);
+                string loginname = firstinitial + emp.LastName;
+
+                result = userManager.Create(new ApplicationUser
+                {
+
+                    UserName = loginname,
+                    Email = firstinitial + emp.LastName + "@Chinook.ca",
+                    EmployeeId = emp.IDValueField
+                }, employeePassword);
+                if (result.Succeeded)
+                    userManager.AddToRole(userManager.FindByName(loginname).Id, employeeRole);
+            }
             //  UserName such as LastName and FirstInitial possible add a number
             //  Email of employee or null or add @Chinook.somewhere.ca to UserName
             //  Employee id is the pkey of the Employee record
             //  use the appSetting newUserPassword for the password
             //  Succeeded, role can come from the Employee record
-
             #endregion
 
             // ... etc. ...

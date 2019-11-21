@@ -38,8 +38,8 @@ namespace ChinookSystem.BLL
                                    select new SelectionList
                                    {
                                         DisplayText = x.LastName + ", " + x.FirstName,
-                                        FirstName = x.FirstName,
                                         LastName = x.LastName,
+                                        FirstName = x.FirstName,
                                         IDValueField = x.EmployeeId
                                    };
                 return employeelist.ToList();
